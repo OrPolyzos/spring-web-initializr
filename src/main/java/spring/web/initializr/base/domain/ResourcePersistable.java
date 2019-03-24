@@ -1,4 +1,4 @@
-package ore.utils.initializrs.spring.web.initializr.domain;
+package spring.web.initializr.base.domain;
 
 public interface ResourcePersistable<ID> {
 

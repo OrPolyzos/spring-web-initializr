@@ -1,9 +1,9 @@
-package ore.utils.initializrs.spring.web.initializr.controller;
+package spring.web.initializr.base.controller;
 
-import ore.utils.initializrs.spring.web.initializr.domain.ResourcePersistable;
-import ore.utils.initializrs.spring.web.initializr.exception.ResourceException;
-import ore.utils.initializrs.spring.web.initializr.exception.ResourceNotFoundException;
-import ore.utils.initializrs.spring.web.initializr.service.ResourceService;
+import spring.web.initializr.base.domain.ResourcePersistable;
+import spring.web.initializr.base.exception.ResourceException;
+import spring.web.initializr.base.exception.ResourceNotFoundException;
+import spring.web.initializr.base.service.ResourceService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.propertyeditors.StringTrimmerEditor;
