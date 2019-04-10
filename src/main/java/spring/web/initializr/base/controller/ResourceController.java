@@ -1,9 +1,5 @@
 package spring.web.initializr.base.controller;
 
-import spring.web.initializr.base.domain.ResourcePersistable;
-import spring.web.initializr.base.exception.ResourceException;
-import spring.web.initializr.base.exception.ResourceNotFoundException;
-import spring.web.initializr.base.service.ResourceService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.propertyeditors.StringTrimmerEditor;
@@ -12,10 +8,15 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import spring.web.initializr.base.domain.ResourcePersistable;
+import spring.web.initializr.base.exception.ResourceException;
+import spring.web.initializr.base.exception.ResourceNotFoundException;
+import spring.web.initializr.base.service.ResourceService;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.Serializable;
-import java.util.function.Function;
+import java.lang.reflect.ParameterizedType;
+import java.lang.reflect.Type;
 
 public abstract class ResourceController<R extends ResourcePersistable<ID>, ID extends Serializable, RF, RSF> implements InformativeController {
 
@@ -24,21 +25,17 @@ public abstract class ResourceController<R extends ResourcePersistable<ID>, ID e
     protected final Class<R> resourceClass;
     protected final Class<RF> resourceFormClass;
     protected final Class<RSF> resourceSearchFormClass;
-
-    protected Function<RF, R> resourceConverter;
-    protected Function<R, RF> reverseResourceConverter;
-
     protected ResourceService<R, RSF, ID> resourceService;
 
-    public ResourceController(Class<R> resourceClass, Class<RF> resourceFormClass, Class<RSF> resourceSearchFormClass,
-                              Function<RF, R> resourceConverter, Function<R, RF> reverseResourceConverter,
-                              ResourceService<R, RSF, ID> resourceService) {
-        this.resourceClass = resourceClass;
-        this.resourceFormClass = resourceFormClass;
-        this.resourceSearchFormClass = resourceSearchFormClass;
-        this.resourceConverter = resourceConverter;
-        this.reverseResourceConverter = reverseResourceConverter;
+    @SuppressWarnings("unchecked")
+    public ResourceController(ResourceService<R, RSF, ID> resourceService) {
         this.resourceService = resourceService;
+
+        Type[] types = ((ParameterizedType) getClass()
+                .getGenericSuperclass()).getActualTypeArguments();
+        this.resourceClass = (Class<R>) types[0];
+        this.resourceFormClass = (Class<RF>) types[2];
+        this.resourceSearchFormClass = (Class<RSF>) types[3];
     }
 
     @InitBinder
@@ -63,7 +60,7 @@ public abstract class ResourceController<R extends ResourcePersistable<ID>, ID e
         }
 
         try {
-            R resourceToSave = resourceConverter.apply(resourceForm);
+            R resourceToSave = resourceFormToResource(resourceForm);
             resourceService.insert(resourceToSave);
             sendInfoMessage(model, getResourceCreatedMessage());
             model.asMap().remove(getResourceFormHolder());
@@ -92,7 +89,7 @@ public abstract class ResourceController<R extends ResourcePersistable<ID>, ID e
         }
         try {
             R resource = resourceService.findOrThrow(resourceId);
-            RF resourceForm = reverseResourceConverter.apply(resource);
+            RF resourceForm = resourceToResourceForm(resource);
             model.addAttribute(getResourceFormHolder(), resourceForm);
             return getEditResourceViewPath();
         } catch (ResourceNotFoundException exception) {
@@ -107,10 +104,10 @@ public abstract class ResourceController<R extends ResourcePersistable<ID>, ID e
             return redirectTo(httpServletRequest.getRequestURI());
         }
         try {
-            R user = resourceConverter.apply(resourceForm);
+            R user = resourceFormToResource(resourceForm);
             resourceService.update(user);
-            sendInfoMessage(model, getResourceUpdatedMessage());
-            return getResourceView(model);
+            redirectInfoMessage(redirectAttributes, getResourceUpdatedMessage());
+            return redirectTo(getResourceBaseUri());
         } catch (ResourceException exception) {
             redirectAttributes.addFlashAttribute(getResourceFormHolder(), resourceForm);
             redirectErrorMessage(redirectAttributes, exception.getMessage());
@@ -147,6 +144,10 @@ public abstract class ResourceController<R extends ResourcePersistable<ID>, ID e
     protected String getResourceDeletedMessage() {
         return "Resource was deleted";
     }
+
+    protected abstract R resourceFormToResource(RF resourceForm);
+
+    protected abstract RF resourceToResourceForm(R resource);
 
     protected abstract String getResourceBaseUri();
 
