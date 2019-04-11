@@ -1,4 +1,4 @@
-package spring.web.initializr.base.controller;
+package ore.spring.web.initializr.controller;
 
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;

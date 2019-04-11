@@ -1,4 +1,4 @@
-package spring.web.initializr.base.exception;
+package ore.spring.web.initializr.exception;
 
 public class ResourceNotFoundException extends ResourceException {
 

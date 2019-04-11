@@ -1,9 +1,9 @@
-package spring.web.initializr.base.service;
+package ore.spring.web.initializr.service;
 
-import spring.web.initializr.base.domain.ResourcePersistable;
-import spring.web.initializr.base.exception.DuplicateResourceException;
-import spring.web.initializr.base.exception.ResourceException;
-import spring.web.initializr.base.exception.ResourceNotFoundException;
+import ore.spring.web.initializr.domain.ResourcePersistable;
+import ore.spring.web.initializr.exception.DuplicateResourceException;
+import ore.spring.web.initializr.exception.ResourceException;
+import ore.spring.web.initializr.exception.ResourceNotFoundException;
 import org.springframework.data.repository.CrudRepository;
 
 import java.io.Serializable;

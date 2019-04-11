@@ -1,5 +1,7 @@
-package spring.web.initializr.base.controller;
+package ore.spring.web.initializr.controller;
 
+import ore.spring.web.initializr.domain.ResourcePersistable;
+import ore.spring.web.initializr.service.ResourceService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.propertyeditors.StringTrimmerEditor;
@@ -8,10 +10,8 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-import spring.web.initializr.base.domain.ResourcePersistable;
-import spring.web.initializr.base.exception.ResourceException;
-import spring.web.initializr.base.exception.ResourceNotFoundException;
-import spring.web.initializr.base.service.ResourceService;
+import ore.spring.web.initializr.exception.ResourceException;
+import ore.spring.web.initializr.exception.ResourceNotFoundException;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.Serializable;
