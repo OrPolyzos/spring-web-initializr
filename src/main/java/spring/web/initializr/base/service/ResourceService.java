@@ -55,14 +55,14 @@ public abstract class ResourceService<R extends ResourcePersistable<ID>, RSF, ID
     }
 
     protected void validateBeforeInsertOrThrow(R resource) throws ResourceException {
-        if (resource.getId() != null && findOptional(resource.getId()).isPresent()) {
-            throw new DuplicateResourceException(resource.getId());
+        if (resource.getResourcePersistableId() != null && findOptional(resource.getResourcePersistableId()).isPresent()) {
+            throw new DuplicateResourceException(resource.getResourcePersistableId());
         }
     }
 
     protected void validateBeforeUpdateOrThrow(R resource) throws ResourceException {
-        if (resource.getId() == null || !findOptional(resource.getId()).isPresent()) {
-            throw new ResourceNotFoundException(resource.getId());
+        if (resource.getResourcePersistableId() == null || !findOptional(resource.getResourcePersistableId()).isPresent()) {
+            throw new ResourceNotFoundException(resource.getResourcePersistableId());
         }
     }
 
