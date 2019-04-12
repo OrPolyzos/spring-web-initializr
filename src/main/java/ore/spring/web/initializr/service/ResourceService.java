@@ -45,10 +45,10 @@ public abstract class ResourceService<R extends ResourcePersistable<ID>, RSF, ID
     }
 
     /**
-     * Find an Optional<ResourcePersistable> based on the resourceId
+     * Find an optional of a ResourcePersistable based on the resourceId
      *
      * @param resourceId the resourceId
-     * @return the Optional<ResourcePersistable>
+     * @return the optional of a ResourcePersistable
      */
     public Optional<R> findOptional(ID resourceId) {
         return Optional.ofNullable(crudRepository.findOne(resourceId));
@@ -144,7 +144,7 @@ public abstract class ResourceService<R extends ResourcePersistable<ID>, RSF, ID
     }
 
     /**
-     * Map an Optional<ResourcePersistable> to a Empty/Singleton List<ResourcePersistable>
+     * Map an optional of a ResourcePersistable to a Empty/Singleton List of ResourcePersistable
      *
      * @param optionalEntity the optional entity
      * @return the list
