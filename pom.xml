@@ -12,7 +12,7 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>1.5.7.RELEASE</version>
+        <version>2.0.0.RELEASE</version>
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
 
@@ -82,7 +82,8 @@
 
     <name>Spring Web Initializr</name>
     <description>This library provides base classes that are able to ease the creation of a webapp project with Spring Boot.
-        One can simply extend one of the provided classes and will automatically do all the stuff related to the CRUD operations of a generic entity.</description>
+        One can simply extend one of the provided classes and will automatically do all the stuff related to the CRUD operations of a generic entity.
+    </description>
     <url>https://github.com/OrPolyzos/spring-web-initializr</url>
 
     <licenses>
