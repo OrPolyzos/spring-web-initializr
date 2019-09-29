@@ -10,11 +10,10 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-import ore.spring.web.initializr.exception.ResourceException;
-import ore.spring.web.initializr.exception.ResourceNotFoundException;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.Serializable;
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 
@@ -85,7 +84,7 @@ public abstract class ResourceController<R extends ResourcePersistable<ID>, ID e
     }
 
     /**
-     * Create resource string.
+     * Create resource.
      *
      * @param resourceForm       the resource form
      * @param bindingResult      the binding result
@@ -99,63 +98,45 @@ public abstract class ResourceController<R extends ResourcePersistable<ID>, ID e
             return redirectTo(getResourceBaseUri());
         }
 
-        try {
-            R resourceToSave = resourceFormToResource(resourceForm);
-            resourceService.insert(resourceToSave);
-            sendInfoMessage(model, getResourceCreatedMessage());
-            model.asMap().remove(getResourceFormHolder());
-            return getResourceView(model);
-        } catch (ResourceException exception) {
-            redirectAttributes.addFlashAttribute(getResourceFormHolder(), resourceForm);
-            redirectErrorMessage(redirectAttributes, exception.getMessage());
-            return redirectTo(getResourceBaseUri());
-        }
+        resourceService.insert(resourceFormToResource(resourceForm));
+        sendInfoMessage(model, getResourceCreatedMessage());
+        model.asMap().remove(getResourceFormHolder());
+        return getResourceView(model);
     }
 
     /**
-     * Delete resource string.
+     * Delete resource.
      *
-     * @param resourceId         the resource id
-     * @param model              the model
-     * @param redirectAttributes the redirect attributes
-     * @return the string
+     * @param resourceId the resource id
+     * @param model      the model
+     * @return the resource view
      */
-    public String deleteResource(ID resourceId, Model model, RedirectAttributes redirectAttributes) {
-        try {
-            resourceService.deleteById(resourceId);
-            sendInfoMessage(model, getResourceDeletedMessage());
-            return getResourceView(model);
-        } catch (ResourceException exception) {
-            redirectErrorMessage(redirectAttributes, exception.getMessage());
-            return redirectTo(getResourceBaseUri());
-        }
+    public String deleteResource(ID resourceId, Model model) {
+        resourceService.deleteById(resourceId);
+        sendInfoMessage(model, getResourceDeletedMessage());
+        return getResourceView(model);
     }
 
     /**
-     * Gets edit resource view.
+     * Get edit resource view.
      *
-     * @param resourceId         the resource id
-     * @param model              the model
-     * @param redirectAttributes the redirect attributes
+     * @param resourceId the resource id
+     * @param model      the model
      * @return the edit resource view
      */
-    public String getEditResourceView(ID resourceId, Model model, RedirectAttributes redirectAttributes) {
+    public String getEditResourceView(ID resourceId, Model model) {
         if (model.containsAttribute(getResourceFormHolder())) {
             return getEditResourceViewPath();
         }
-        try {
-            R resource = resourceService.findOrThrow(resourceId);
-            RF resourceForm = resourceToResourceForm(resource);
-            model.addAttribute(getResourceFormHolder(), resourceForm);
-            return getEditResourceViewPath();
-        } catch (ResourceNotFoundException exception) {
-            redirectErrorMessage(redirectAttributes, exception.getMessage());
-            return redirectTo(getResourceBaseUri());
-        }
+
+        RF resourceForm = resourceToResourceForm(resourceService.findOrThrow(resourceId));
+        model.addAttribute(getResourceFormHolder(), resourceForm);
+        return getEditResourceViewPath();
+
     }
 
     /**
-     * Edit resource string.
+     * Edit resource.
      *
      * @param resourceId         the resource id
      * @param resourceForm       the resource form
@@ -163,23 +144,17 @@ public abstract class ResourceController<R extends ResourcePersistable<ID>, ID e
      * @param model              the model
      * @param redirectAttributes the redirect attributes
      * @param httpServletRequest the http servlet request
-     * @return the string
+     * @return the resource view
      */
     public String editResource(ID resourceId, RF resourceForm, BindingResult bindingResult, Model model, RedirectAttributes redirectAttributes, HttpServletRequest httpServletRequest) {
         if (bindingResult.hasErrors()) {
             sendBindingErrors(redirectAttributes, bindingResult, getResourceFormHolder(), resourceForm);
             return redirectTo(httpServletRequest.getRequestURI());
         }
-        try {
-            R user = resourceFormToResource(resourceForm);
-            resourceService.update(user);
-            redirectInfoMessage(redirectAttributes, getResourceUpdatedMessage());
-            return redirectTo(getResourceBaseUri());
-        } catch (ResourceException exception) {
-            redirectAttributes.addFlashAttribute(getResourceFormHolder(), resourceForm);
-            redirectErrorMessage(redirectAttributes, exception.getMessage());
-            return redirectTo(httpServletRequest.getRequestURI());
-        }
+        resourceService.update(resourceFormToResource(resourceForm));
+        sendInfoMessage(redirectAttributes, getResourceUpdatedMessage());
+        model.asMap().remove(getResourceFormHolder());
+        return getResourceView(model);
     }
 
     /**
@@ -202,8 +177,8 @@ public abstract class ResourceController<R extends ResourcePersistable<ID>, ID e
 
     private <E> E createInstanceOf(Class<E> clazz) {
         try {
-            return clazz.newInstance();
-        } catch (InstantiationException | IllegalAccessException e) {
+            return clazz.getDeclaredConstructor().newInstance();
+        } catch (NoSuchMethodException | InvocationTargetException | InstantiationException | IllegalAccessException e) {
             LOGGER.error("Failed to instantiate: {} | Message: {}", clazz.getName(), e.getMessage());
             return null;
         }

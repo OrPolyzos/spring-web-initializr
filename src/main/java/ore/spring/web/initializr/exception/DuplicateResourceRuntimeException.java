@@ -1,18 +1,18 @@
 package ore.spring.web.initializr.exception;
 
 /**
- * The type Resource not found exception.
+ * The type DuplicateResourceRuntimeException.
  */
-public class ResourceNotFoundException extends ResourceException {
+public class DuplicateResourceRuntimeException extends ResourceRuntimeException {
 
-    private static final String MESSAGE = "No Resource found with ID: %s";
+    private static final String MESSAGE = "There is already a Resource with ID: %s";
 
     private Object resourcePersistableId;
 
     /**
-     * @param resourcePersistableId the resourcePersistableId
+     * @param resourcePersistableId the resource id
      */
-    public ResourceNotFoundException(Object resourcePersistableId) {
+    public DuplicateResourceRuntimeException(Object resourcePersistableId) {
         super(String.format(MESSAGE, resourcePersistableId));
         this.resourcePersistableId = resourcePersistableId;
     }

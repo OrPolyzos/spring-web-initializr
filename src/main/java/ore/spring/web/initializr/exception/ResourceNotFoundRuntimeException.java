@@ -3,7 +3,7 @@ package ore.spring.web.initializr.exception;
 /**
  * The type Resource not found exception.
  */
-public class ResourceNotFoundException extends ResourceException {
+public class ResourceNotFoundRuntimeException extends ResourceRuntimeException {
 
     private static final String MESSAGE = "No Resource found with ID: %s";
 
@@ -12,7 +12,7 @@ public class ResourceNotFoundException extends ResourceException {
     /**
      * @param resourcePersistableId the resourcePersistableId
      */
-    public ResourceNotFoundException(Object resourcePersistableId) {
+    public ResourceNotFoundRuntimeException(Object resourcePersistableId) {
         super(String.format(MESSAGE, resourcePersistableId));
         this.resourcePersistableId = resourcePersistableId;
     }
