@@ -1,9 +1,9 @@
 package ore.spring.web.initializr.service;
 
 import ore.spring.web.initializr.domain.ResourcePersistable;
-import ore.spring.web.initializr.exception.DuplicateResourceRuntimeException;
-import ore.spring.web.initializr.exception.ResourceNotFoundRuntimeException;
-import ore.spring.web.initializr.exception.ResourceRuntimeException;
+import ore.spring.web.initializr.exception.runtime.RPRuntimeDuplicateException;
+import ore.spring.web.initializr.exception.runtime.RPRuntimeNotFoundException;
+import ore.spring.web.initializr.exception.runtime.RPRuntimeException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.repository.CrudRepository;
@@ -15,43 +15,44 @@ import java.util.List;
 import java.util.Optional;
 
 /**
- * The ResourceService is a layer of abstraction to communicate with the CrudRepository.
+ * The ResourcePersistableService is a layer of abstraction to communicate with the CrudRepository
+ * The ResourcePersistableService is an intermediate layer of between the ResourcePersistableController and the CrudRepository
  *
  * @param <R>   the type parameter used for the ResourcePersistable
- * @param <RSF> the type parameter used for the ResourceSearchForm
- * @param <ID>  the type parameter used for the Id of the ResourcePersistable
+ * @param <RSF> the type parameter used for the ResourcePersistableSearchForm
+ * @param <ID>  the type parameter used for the ResourcePersistableId
  */
-public abstract class ResourceService<R extends ResourcePersistable<ID>, RSF, ID extends Serializable> {
+public abstract class ResourcePersistableService<R extends ResourcePersistable<ID>, RSF, ID extends Serializable> {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(ResourceService.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(ResourcePersistableService.class);
 
     /**
      * The CrudRepository to be used for the ResourcePersistable
      */
-    protected CrudRepository<R, ID> crudRepository;
+    private CrudRepository<R, ID> crudRepository;
 
     /**
      * @param crudRepository the CrudRepository
      */
-    public ResourceService(CrudRepository<R, ID> crudRepository) {
+    public ResourcePersistableService(CrudRepository<R, ID> crudRepository) {
         this.crudRepository = crudRepository;
     }
 
     /**
-     * Finds a ResourcePersistable based on the resourceId (will be null if it was not found)
+     * Find a ResourcePersistable based on its resourcePersistableId
      *
-     * @param resourceId the resourceId
-     * @return the resourcePersistable that was found
+     * @param resourcePersistableId the ResourcePersistableId
+     * @return the ResourcePersistable that was found or else null
      */
-    public R find(ID resourceId) {
-        return findOptional(resourceId).orElse(null);
+    public R find(ID resourcePersistableId) {
+        return findOptional(resourcePersistableId).orElse(null);
     }
 
     /**
-     * Find an optional of ResourcePersistable based on the resourcePersistableId
-     * Catching NoSuchMethodError to maintain compatibility with spring-boot-starter-parent versions less than 2.0.0-RELEASE
+     * Find an optional of ResourcePersistable based on its resourcePersistableId
+     * Using reflection as a fallback mechanism to maintain compatibility with spring-boot-starter-parent versions less than 2.0.0-RELEASE
      *
-     * @param resourcePersistableId the resourcePersistableId
+     * @param resourcePersistableId the ResourcePersistableId
      * @return the optional of a ResourcePersistable
      */
     @SuppressWarnings("unchecked")
@@ -66,21 +67,21 @@ public abstract class ResourceService<R extends ResourcePersistable<ID>, RSF, ID
                 return Optional.ofNullable((R) findOneMethod.invoke(crudRepository, resourcePersistableId));
             } catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException ex) {
                 LOGGER.error(e.getMessage());
-                throw new ResourceRuntimeException("Caught unexpected NoSuchMethodException during reflection.");
+                throw new RPRuntimeException("Caught unexpected NoSuchMethodException during reflection.");
             }
         }
     }
 
     /**
-     * Find a ResourcePersistable based on the resourcePersistableId or throw a ResourceNotFoundRuntimeException
+     * Find a ResourcePersistable based on its resourcePersistableId or throw a RPRuntimeNotFoundException
      *
-     * @param resourcePersistableId the resourcePersistableId
-     * @return the resourcePersistable that was found
-     * @throws ResourceNotFoundRuntimeException the ResourceNotFoundException that may be thrown
+     * @param resourcePersistableId the ResourcePersistableId
+     * @return the ResourcePersistable that was found
+     * @throws RPRuntimeNotFoundException if no ResourcePersistable was found
      */
     public R findOrThrow(ID resourcePersistableId) {
         return findOptional(resourcePersistableId)
-                .orElseThrow(() -> new ResourceNotFoundRuntimeException(resourcePersistableId));
+                .orElseThrow(() -> new RPRuntimeNotFoundException(resourcePersistableId));
     }
 
     /**
@@ -93,20 +94,20 @@ public abstract class ResourceService<R extends ResourcePersistable<ID>, RSF, ID
     }
 
     /**
-     * Search for ResourcePersistables by a ResourceSearchForm
+     * Search for ResourcePersistables by a ResourcePersistableSearchForm
      *
-     * @param resourceSearchForm the ResourceSearchForm to be used for search criteria
+     * @param resourcePersistableSearchForm the ResourcePersistableSearchForm to be used for search criteria
      * @return the List of ResourcePersistables that were found
      */
-    public List<R> searchBy(RSF resourceSearchForm) {
+    public List<R> searchBy(RSF resourcePersistableSearchForm) {
         return findAll();
     }
 
     /**
      * Insert a ResourcePersistable
      *
-     * @param resourcePersistable the resourcePersistable
-     * @return the resourcePersistable to be saved
+     * @param resourcePersistable the ResourcePersistable
+     * @return the ResourcePersistable that was created
      */
     public R insert(R resourcePersistable) {
         validateBeforeInsertOrThrow(resourcePersistable);
@@ -116,8 +117,8 @@ public abstract class ResourceService<R extends ResourcePersistable<ID>, RSF, ID
     /**
      * Update a ResourcePersistable
      *
-     * @param resourcePersistable the resourcePersistable to be updated
-     * @return the updated resourcePersistable
+     * @param resourcePersistable the ResourcePersistable to be updated
+     * @return the ResourcePersistable that was updated
      */
     public R update(R resourcePersistable) {
         validateBeforeUpdateDeleteOrThrow(resourcePersistable.getResourcePersistableId());
@@ -125,9 +126,9 @@ public abstract class ResourceService<R extends ResourcePersistable<ID>, RSF, ID
     }
 
     /**
-     * Delete a ResourcePersistable by resourcePersistableId
+     * Delete a ResourcePersistable by its ResourcePersistableId
      *
-     * @param resourcePersistableId the resourceId to be used for deletion
+     * @param resourcePersistableId the ResourcePersistableId to be used for deletion
      */
     public void deleteById(ID resourcePersistableId) {
         validateBeforeUpdateDeleteOrThrow(resourcePersistableId);
@@ -135,26 +136,26 @@ public abstract class ResourceService<R extends ResourcePersistable<ID>, RSF, ID
     }
 
     /**
-     * Validate before insert or throw a DuplicateResourceException
+     * Validate before insert or throw a RPRuntimeDuplicateException
      *
      * @param resourcePersistable the resourcePersistable to be inserted
-     * @throws DuplicateResourceRuntimeException the duplicateResourceException
+     * @throws RPRuntimeDuplicateException if the ResourcePersistableId of the resourcePersistable exists already
      */
     protected void validateBeforeInsertOrThrow(R resourcePersistable) {
         if (resourcePersistable.getResourcePersistableId() != null && findOptional(resourcePersistable.getResourcePersistableId()).isPresent()) {
-            throw new DuplicateResourceRuntimeException(resourcePersistable.getResourcePersistableId());
+            throw new RPRuntimeDuplicateException(resourcePersistable.getResourcePersistableId());
         }
     }
 
     /**
-     * Validate before update/delete or throw a resourceNotFoundRuntimeException
+     * Validate before update/delete or throw a RPRuntimeNotFoundException
      *
-     * @param resourcePersistableId the resourcePersistableId of the resourcePersistable to be updated/deleted
-     * @throws ResourceNotFoundRuntimeException the resourceNotFoundRuntimeException
+     * @param resourcePersistableId the ResourcePersistableId of the resourcePersistable to be updated/deleted
+     * @throws RPRuntimeNotFoundException the RPRuntimeNotFoundException
      */
     protected void validateBeforeUpdateDeleteOrThrow(ID resourcePersistableId) {
         if (resourcePersistableId == null || !findOptional(resourcePersistableId).isPresent()) {
-            throw new ResourceNotFoundRuntimeException(resourcePersistableId);
+            throw new RPRuntimeNotFoundException(resourcePersistableId);
         }
     }
 }

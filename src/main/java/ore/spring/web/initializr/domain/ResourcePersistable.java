@@ -1,16 +1,16 @@
 package ore.spring.web.initializr.domain;
 
 /**
- * The interface Resource persistable.
+ * The interface ResourcePersistable
  *
  * @param <ID> the type parameter used for the (primary key) of the entity
  */
 public interface ResourcePersistable<ID> {
 
     /**
-     * Gets resource persistable id.
+     * Get the resourcePersistableId
      *
-     * @return the resource persistable id
+     * @return the ResourcePersistableId
      */
     ID getResourcePersistableId();
 }

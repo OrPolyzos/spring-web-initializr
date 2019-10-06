@@ -6,7 +6,7 @@
 
     <groupId>io.github.orpolyzos</groupId>
     <artifactId>spring-web-initializr</artifactId>
-    <version>1.2.0</version>
+    <version>3.0.0</version>
     <packaging>jar</packaging>
 
     <parent>
@@ -16,7 +16,7 @@
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
 
-    <build>git
+    <build>
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
