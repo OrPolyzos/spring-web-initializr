@@ -1,6 +1,7 @@
 package ore.spring.web.initializr.controller;
 
 import ore.spring.web.initializr.domain.ResourcePersistable;
+import ore.spring.web.initializr.exception.runtime.RPRuntimeException;
 import ore.spring.web.initializr.service.ResourcePersistableService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -8,6 +9,7 @@ import org.springframework.beans.propertyeditors.StringTrimmerEditor;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.WebDataBinder;
+import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
@@ -28,6 +30,8 @@ import java.lang.reflect.Type;
 public abstract class ResourcePersistableController<R extends ResourcePersistable<ID>, ID extends Serializable, RF, RSF> implements InformativeController {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(ResourcePersistableController.class.getName());
+
+    private static final String GENERIC_ERROR_MESSAGE = "Something went really wrong! :(";
 
     /**
      * The ResourcePersistableForm Class is used to instantiate a ResourcePersistableForm
@@ -184,6 +188,33 @@ public abstract class ResourcePersistableController<R extends ResourcePersistabl
             redirectTo(getResourcePersistableBaseUri());
         }
         model.addAttribute(getResourcePersistableListHolder(), resourcePersistableService.searchBy(resourcePersistableSearchForm));
+        return getResourcePersistableBaseView(model);
+    }
+
+    /**
+     * Handle RPRuntimeExceptions
+     *
+     * @param exception the RPRuntimeException
+     * @param model     the Model
+     * @return the ResourcePersistableBaseView
+     */
+    @ExceptionHandler({RPRuntimeException.class})
+    public String handleRPRuntimeException(RPRuntimeException exception, Model model) {
+        sendErrorMessage(model, exception.getMessage());
+        return getResourcePersistableBaseView(model);
+    }
+
+    /**
+     * Handle Exception
+     *
+     * @param exception the Exception
+     * @param model     the Model
+     * @return the ResourcePersistableBaseView
+     */
+    @ExceptionHandler({Exception.class})
+    public String handleException(Exception exception, Model model) {
+        LOGGER.error(exception.getMessage());
+        sendErrorMessage(model, GENERIC_ERROR_MESSAGE);
         return getResourcePersistableBaseView(model);
     }
 
