@@ -48,13 +48,13 @@ public abstract class ResourcePersistableController<R extends ResourcePersistabl
     /**
      * The ResourcePersistableService is used to Create, Read, Update, Delete ResourcePersistables
      */
-    private ResourcePersistableService<R, RSF, ID> resourcePersistableService;
+    private ResourcePersistableService<R, ID, RSF> resourcePersistableService;
 
     /**
      * @param resourcePersistableService the ResourcePersistableService
      */
     @SuppressWarnings("unchecked")
-    public ResourcePersistableController(ResourcePersistableService<R, RSF, ID> resourcePersistableService) {
+    public ResourcePersistableController(ResourcePersistableService<R, ID, RSF> resourcePersistableService) {
         this.resourcePersistableService = resourcePersistableService;
 
         Type[] types = ((ParameterizedType) getClass()

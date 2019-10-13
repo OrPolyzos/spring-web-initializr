@@ -22,7 +22,7 @@ import java.util.Optional;
  * @param <RSF> the type parameter used for the ResourcePersistableSearchForm
  * @param <ID>  the type parameter used for the ResourcePersistableId
  */
-public abstract class ResourcePersistableService<R extends ResourcePersistable<ID>, RSF, ID extends Serializable> {
+public abstract class ResourcePersistableService<R extends ResourcePersistable<ID>, ID extends Serializable, RSF> {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(ResourcePersistableService.class);
 
