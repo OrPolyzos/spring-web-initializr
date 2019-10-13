@@ -7,9 +7,9 @@ Spring Web Initializr
 [![spring-boot-2.0.0.RELEASE][shield-spring]](#)
 [![MIT licensed][shield-license]](#)
 
-Spring Web Initializr _(will be referenced SWI from now on)_ is a library that will help you easily create Web Apps with Spring Boot.  
+Spring Web Initializr _(will be referenced Swi from now on)_ is a library that will help you easily create Web Apps with Spring Boot.  
 It was mainly developed in order to support the [Swip (Spring Web Initializr Plugin)](https://plugins.jetbrains.com/plugin/12239-swip-spring-web-initializr-) built for IntelliJ IDEA, but can be obviously used independently.
-However, you will understand better the usage and the purpose of the library, if you choose to use the SWIP first.
+However, you will understand better the usage and the purpose of the library, if you choose to use the Swip first.
 
 Table of Contents
 -----------------
@@ -21,7 +21,7 @@ Table of Contents
 Description
 -----------
 
-SWI is essentially providing interfaces/abstract classes that contain the base logic for the Create, Read, Update & Delete  operations of the ResourcePersistable Entity.  
+Swi is essentially providing interfaces/abstract classes that contain the base logic for the Create, Read, Update & Delete  operations of the ResourcePersistable Entity.  
 It is taken for granted, that the user of the library is going to user a template engine, but there is no restriction to which one.
 
 _ResourcePersistable<ID>_
@@ -37,17 +37,17 @@ _ResourcePersistableController<R extends ResourcePersistable<ID>, ID extends Ser
 * **R extends ResourcePersistable<ID>** stands for the class ResourcePersistableEntity (e.g. User, Vehicle, etc...)
 * **ID extends Serializable** stands for the class of the field representing the primary key of the Entity (e.g. Long)
 * **RF** stands for the class of the ResourcePersistableForm, that should contain all the fields required in order to create a ResourcePersistable (e.g. UserForm, VehicleForm)
-  * Can might as well be the class of the ResourcePersistable itself
+  * Might as well be the class of the ResourcePersistable itself
 * **RSF** stands for the class of the ResourcePersistableSearchForm, that should contain all the fields in order to search for a ResourcePersistable (e.g. UserSearchForm, VehicleSearchForm)
-  * Can might as well be the class of the ResourcePersistable itself
-* The only methods that should be implemented are the ones
+  * Might as well be the class of the ResourcePersistable itself
+* The methods that should be implemented are the ones that provide the endpoint & the resources paths as well as the transformation methods from a ResourcePersistable to a ResourcePersistableForm and vice versa.
   
 _ResourcePersistableService<R extends ResourcePersistable<ID>, ID extends Serializable, RSF>_
 * Meant to be extended by the Spring @Service for the corresponding ResourcePersistable entity (e.g. UserService, VehicleService, etc...)
 * **R extends ResourcePersistable<ID>** stands for the class ResourcePersistableEntity (e.g. User, Vehicle, etc...)
 * **ID extends Serializable** stands for the class of the field representing the primary key of the Entity (e.g. Long)
 * **RSF** stands for the class of the ResourcePersistableSearchForm, that should contain all the fields in order to search for a ResourcePersistable (e.g. UserSearchForm, VehicleSearchForm)
-  * Can might as well be the class of the ResourcePersistable itself  
+  * Might as well be the class of the ResourcePersistable itself  
 
 
 Example
@@ -202,13 +202,11 @@ public class UserResourcePersistableController extends ResourcePersistableContro
 
 Contributing
 ------------
-To contribute to Spring Web Initializr, clone this repo locally and commit your code on a separate branch.
-
-You can find more detail in our [contributing guide](#). Participation in this open source project is subject to a [Code of Conduct](#).
+To contribute to Spring Web Initializr, follow the instructions in our [contributing guide](/contributing.md). Participation in this open source project is subject to a [Code of Conduct](#).
 
 License
 -------
-Spring Web Initializr is licensed under the [MIT](#license.md) license.  
+Spring Web Initializr is licensed under the [MIT](license.md) license.  
 Copyright &copy; 2019, Orestes Polyzos
 
 [shield-release]: https://img.shields.io/badge/release-3.0.0-blue.svg
