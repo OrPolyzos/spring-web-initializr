@@ -202,11 +202,11 @@ public class UserResourcePersistableController extends ResourcePersistableContro
 
 Contributing
 ------------
-To contribute to Spring Web Initializr, follow the instructions in our [contributing guide](/contributing.md). Participation in this open source project is subject to a [Code of Conduct](#).
+To contribute to Spring Web Initializr, follow the instructions in our [contributing guide](/contributing.md).
 
 License
 -------
-Spring Web Initializr is licensed under the [MIT](license.md) license.  
+Spring Web Initializr is licensed under the [MIT](/license.md) license.  
 Copyright &copy; 2019, Orestes Polyzos
 
 [shield-release]: https://img.shields.io/badge/release-3.0.0-blue.svg
