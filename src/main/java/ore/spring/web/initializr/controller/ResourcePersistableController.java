@@ -2,7 +2,7 @@ package ore.spring.web.initializr.controller;
 
 import ore.spring.web.initializr.domain.ResourcePersistable;
 import ore.spring.web.initializr.exception.runtime.RPRuntimeException;
-import ore.spring.web.initializr.service.ResourcePersistableService;
+import ore.spring.web.initializr.service.impl.NoDtoRpService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.propertyeditors.StringTrimmerEditor;
@@ -48,14 +48,14 @@ public abstract class ResourcePersistableController<R extends ResourcePersistabl
     /**
      * The ResourcePersistableService is used to Create, Read, Update, Delete ResourcePersistables
      */
-    private ResourcePersistableService<R, ID, RSF> resourcePersistableService;
+    private NoDtoRpService<R, ID, RSF> noDtoRpService;
 
     /**
-     * @param resourcePersistableService the ResourcePersistableService
+     * @param noDtoRpService the ResourcePersistableService
      */
     @SuppressWarnings("unchecked")
-    public ResourcePersistableController(ResourcePersistableService<R, ID, RSF> resourcePersistableService) {
-        this.resourcePersistableService = resourcePersistableService;
+    public ResourcePersistableController(NoDtoRpService<R, ID, RSF> noDtoRpService) {
+        this.noDtoRpService = noDtoRpService;
 
         Type[] types = ((ParameterizedType) getClass()
                 .getGenericSuperclass()).getActualTypeArguments();
@@ -105,7 +105,7 @@ public abstract class ResourcePersistableController<R extends ResourcePersistabl
             return redirectTo(getResourcePersistableBaseUri());
         }
 
-        resourcePersistableService.insert(resourcePersistableFormToResourcePersistable(resourcePersistableForm));
+        noDtoRpService.insert(resourcePersistableFormToResourcePersistable(resourcePersistableForm));
         sendInfoMessage(model, getSuccessfulCreateMessage());
         model.asMap().remove(getResourcePersistableFormHolder());
         return getResourcePersistableBaseView(model);
@@ -121,7 +121,7 @@ public abstract class ResourcePersistableController<R extends ResourcePersistabl
      * @return the ResourcePersistableBaseView
      */
     public String deleteResourcePersistable(ID resourcePersistableId, Model model) {
-        resourcePersistableService.deleteById(resourcePersistableId);
+        noDtoRpService.deleteById(resourcePersistableId);
         sendInfoMessage(model, getSuccessfulDeleteMessage());
         return getResourcePersistableBaseView(model);
     }
@@ -140,7 +140,7 @@ public abstract class ResourcePersistableController<R extends ResourcePersistabl
             return getResourcePersistableEditViewPath();
         }
 
-        RF resourcePersistableForm = resourcePersistableToResourcePersistableForm(resourcePersistableService.findOrThrow(resourcePersistableId));
+        RF resourcePersistableForm = resourcePersistableToResourcePersistableForm(noDtoRpService.findOrThrow(resourcePersistableId));
         model.addAttribute(getResourcePersistableFormHolder(), resourcePersistableForm);
         return getResourcePersistableEditViewPath();
 
@@ -164,7 +164,7 @@ public abstract class ResourcePersistableController<R extends ResourcePersistabl
             sendBindingErrors(redirectAttributes, bindingResult, getResourcePersistableFormHolder(), resourcePersistableForm);
             return redirectTo(String.format("%s/%s", getResourcePersistableBaseUri(), resourcePersistableId));
         }
-        resourcePersistableService.update(resourcePersistableFormToResourcePersistable(resourcePersistableForm));
+        noDtoRpService.update(resourcePersistableFormToResourcePersistable(resourcePersistableForm));
         sendInfoMessage(redirectAttributes, getSuccessfulUpdateMessage());
         model.asMap().remove(getResourcePersistableFormHolder());
         return getResourcePersistableBaseView(model);
@@ -187,7 +187,7 @@ public abstract class ResourcePersistableController<R extends ResourcePersistabl
             sendBindingErrors(redirectAttributes, bindingResult, getResourcePersistableSearchFormHolder(), resourcePersistableSearchForm);
             redirectTo(getResourcePersistableBaseUri());
         }
-        model.addAttribute(getResourcePersistableListHolder(), resourcePersistableService.searchBy(resourcePersistableSearchForm));
+        model.addAttribute(getResourcePersistableListHolder(), noDtoRpService.searchBy(resourcePersistableSearchForm));
         return getResourcePersistableBaseView(model);
     }
 
