@@ -14,7 +14,7 @@ public interface RpService<R, ID> {
 
     Stream<R> findAll();
 
-    Stream<R> searchBy(Map<String, String> criteria);
+    Stream<R> findAllBy(Map<String, String> criteria);
 
     R insert(R resourcePersistable);
 

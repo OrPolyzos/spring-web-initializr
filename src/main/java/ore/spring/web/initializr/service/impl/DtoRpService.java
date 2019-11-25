@@ -58,7 +58,7 @@ public interface DtoRpService<R extends ResourcePersistable<ID>, ID extends Seri
     }
 
     @Override
-    default Stream<D> searchBy(Map<String, String> criteria) {
+    default Stream<D> findAllBy(Map<String, String> criteria) {
         return StreamSupport.stream(getRepository().findAll().spliterator(), false)
                 .map(getEntityToDtoConverter());
 
