@@ -5,7 +5,7 @@ import ore.spring.web.initializr.domain.ResourcePersistable;
 import java.io.Serializable;
 import java.util.function.Function;
 
-public interface NoDtoRpService<R extends ResourcePersistable<ID>, ID extends Serializable> extends DtoRpService<R, ID, R> {
+public interface NoDtoRpService<R extends ResourcePersistable<ID>, ID extends Serializable> extends RpService<R, ID, R> {
 
     @Override
     default Function<R, R> getEntityToDtoConverter() {
