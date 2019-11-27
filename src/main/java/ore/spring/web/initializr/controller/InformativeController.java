@@ -2,7 +2,6 @@ package ore.spring.web.initializr.controller;
 
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 
 /**
@@ -34,23 +33,12 @@ public interface InformativeController {
     }
 
     /**
-     * Add the redirect prefix needed to do a redirect request
+     * Add success message to the model
      *
-     * @param uri the uri to redirect
-     * @return the redirect string
+     * @param model the Model
      */
-    default String redirectTo(String uri) {
-        return "redirect:" + uri;
-    }
-
-    /**
-     * Add information message to the model
-     *
-     * @param model   the Model
-     * @param message the InfoMessage
-     */
-    default void sendInfoMessage(Model model, String message) {
-        model.addAttribute(getInfoMessageHolder(), message);
+    default void sendSuccessMessage(Model model) {
+        model.addAttribute(getInfoMessageHolder(), "Action was successful");
     }
 
     /**
@@ -64,36 +52,16 @@ public interface InformativeController {
     }
 
     /**
-     * Add information message to the redirect attributes
-     *
-     * @param redirectAttributes the RedirectAttributes
-     * @param message            the InfoMessage
-     */
-    default void redirectInfoMessage(RedirectAttributes redirectAttributes, String message) {
-        redirectAttributes.addFlashAttribute(getInfoMessageHolder(), message);
-    }
-
-    /**
-     * Add error message to the redirect attributes
-     *
-     * @param redirectAttributes the RedirectAttributes
-     * @param message            the ErrorMessage
-     */
-    default void redirectErrorMessage(RedirectAttributes redirectAttributes, String message) {
-        redirectAttributes.addFlashAttribute(getErrorMessageHolder(), message);
-    }
-
-    /**
      * Add binding errors to the redirect attributes
      *
-     * @param redirectAttributes the RedirectAttributes
-     * @param bindingResult      the BindingResult
-     * @param itemHolder         the ItemHolder
-     * @param actualObject       the ActualObject
+     * @param model         the RedirectAttributes
+     * @param bindingResult the BindingResult
+     * @param itemHolder    the ItemHolder
+     * @param actualObject  the ActualObject
      */
-    default void sendBindingErrors(RedirectAttributes redirectAttributes, BindingResult bindingResult, String itemHolder, Object actualObject) {
-        redirectAttributes.addFlashAttribute(BINDING_RESULT_PREFIX + itemHolder, bindingResult);
-        redirectAttributes.addFlashAttribute(itemHolder, actualObject);
+    default void sendBindingErrors(Model model, BindingResult bindingResult, String itemHolder, Object actualObject) {
+        model.addAttribute(BINDING_RESULT_PREFIX + itemHolder, bindingResult);
+        model.addAttribute(itemHolder, actualObject);
     }
 
 }

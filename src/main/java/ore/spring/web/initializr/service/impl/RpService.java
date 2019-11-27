@@ -19,7 +19,7 @@ import java.util.stream.StreamSupport;
 
 public interface RpService<R extends ResourcePersistable<ID>, ID extends Serializable, D> extends ResourcePersistableService<D, ID> {
 
-    Logger DTO_RP_SERVICE_LOGGER = LoggerFactory.getLogger(RpService.class);
+    Logger RP_SERVICE_LOGGER = LoggerFactory.getLogger(RpService.class);
 
     CrudRepository<R, ID> getRepository();
 
@@ -43,7 +43,7 @@ public interface RpService<R extends ResourcePersistable<ID>, ID extends Seriali
         try {
             return getRepository().findById(id).map(getEntityToDtoConverter());
         } catch (NoSuchMethodError e) {
-            DTO_RP_SERVICE_LOGGER.warn("Caught (expected) NoSuchMethodError. " +
+            RP_SERVICE_LOGGER.warn("Caught (expected) NoSuchMethodError. " +
                     "Most probably you are using a spring-boot-starter-parent version lower than 2.0.0.RELEASE. " +
                     "It is strongly advised to override this method and use findOne() instead " +
                     "or update your spring-boot-starter-parent-version to (at least) 2.0.0.RELEASE.");
@@ -52,7 +52,7 @@ public interface RpService<R extends ResourcePersistable<ID>, ID extends Seriali
                 Method findOneMethod = getRepository().getClass().getMethod("findOne", Serializable.class);
                 return Optional.ofNullable(getEntityToDtoConverter().apply((R) findOneMethod.invoke(getRepository(), id)));
             } catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException ex) {
-                DTO_RP_SERVICE_LOGGER.error(e.getMessage());
+                RP_SERVICE_LOGGER.error(e.getMessage());
                 throw new RuntimeException("Caught unexpected NoSuchMethodException during reflection.");
             }
         }
