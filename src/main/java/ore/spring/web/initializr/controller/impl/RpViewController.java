@@ -2,7 +2,8 @@ package ore.spring.web.initializr.controller.impl;
 
 import ore.spring.web.initializr.controller.InformativeController;
 import ore.spring.web.initializr.controller.api.ResourcePersistableViewController;
-import ore.spring.web.initializr.service.api.ResourcePersistableService;
+import ore.spring.web.initializr.domain.ResourcePersistable;
+import ore.spring.web.initializr.service.impl.NoDtoRpService;
 import ore.spring.web.initializr.service.impl.RpService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -13,13 +14,13 @@ import java.io.Serializable;
 import java.lang.reflect.InvocationTargetException;
 import java.util.stream.Collectors;
 
-public interface RpViewController<D, ID extends Serializable> extends ResourcePersistableViewController<D, ID>, InformativeController {
+public interface RpViewController<D extends ResourcePersistable<ID>, ID extends Serializable> extends ResourcePersistableViewController<D, ID>, InformativeController {
 
     Logger RP_VIEW_CONTROLLER_LOG = LoggerFactory.getLogger(RpService.class);
 
     Class<D> getRpClass();
 
-    ResourcePersistableService<D, ID> getService();
+    NoDtoRpService<D, ID> getService();
 
     default String getBaseView(Model model) {
         if (!model.containsAttribute(getHolder())) {
