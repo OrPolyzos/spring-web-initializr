@@ -1,9 +1,8 @@
 package ore.spring.web.initializr.controller.impl;
 
-import ore.spring.web.initializr.controller.InformativeController;
+import ore.spring.web.initializr.controller.Messenger;
 import ore.spring.web.initializr.controller.api.ResourcePersistableViewController;
-import ore.spring.web.initializr.domain.ResourcePersistable;
-import ore.spring.web.initializr.service.impl.NoDtoRpService;
+import ore.spring.web.initializr.service.api.ResourcePersistableService;
 import ore.spring.web.initializr.service.impl.RpService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -12,15 +11,14 @@ import org.springframework.validation.BindingResult;
 
 import java.io.Serializable;
 import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.ParameterizedType;
 import java.util.stream.Collectors;
 
-public interface RpViewController<D extends ResourcePersistable<ID>, ID extends Serializable> extends ResourcePersistableViewController<D, ID>, InformativeController {
+public interface RpViewController<D, ID extends Serializable> extends ResourcePersistableViewController<D, ID>, Messenger {
 
     Logger RP_VIEW_CONTROLLER_LOG = LoggerFactory.getLogger(RpService.class);
 
-    Class<D> getRpClass();
-
-    NoDtoRpService<D, ID> getService();
+    ResourcePersistableService<D, ID> getService();
 
     default String getBaseView(Model model) {
         if (!model.containsAttribute(getHolder())) {
@@ -77,12 +75,16 @@ public interface RpViewController<D extends ResourcePersistable<ID>, ID extends 
         return getBaseView(model);
     }
 
+    @SuppressWarnings("unchecked")
     default D getRpDto() {
+        RP_VIEW_CONTROLLER_LOG.warn("It is strongly advised to override the RpViewController::getRpDto method " +
+                "and provide your own implementation for creating a new instance, in order to avoid using reflection.");
+        Class<D> rpDto = (Class<D>) ((ParameterizedType) this.getClass().getGenericInterfaces()[0]).getActualTypeArguments()[0];
         try {
-            return getRpClass().getDeclaredConstructor().newInstance();
+            return rpDto.getDeclaredConstructor().newInstance();
         } catch (NoSuchMethodException | InvocationTargetException | InstantiationException | IllegalAccessException e) {
-            RP_VIEW_CONTROLLER_LOG.error("Failed to instantiate: {} | Message: {}", getRpClass().getName(), e.getMessage());
-            RP_VIEW_CONTROLLER_LOG.warn("Consider declaring a default constructor for Class: {}", getRpClass().getName());
+            RP_VIEW_CONTROLLER_LOG.error("Failed to instantiate: {} | Message: {}", rpDto.getName(), e.getMessage());
+            RP_VIEW_CONTROLLER_LOG.error("No default constructor found for Class: {}.", rpDto.getName());
             return null;
         }
     }
@@ -97,7 +99,7 @@ public interface RpViewController<D extends ResourcePersistable<ID>, ID extends 
     }
 
     default String getHolder() {
-        return getRpClass().getSimpleName().toLowerCase();
+        return getRpDto().getClass().getSimpleName().toLowerCase();
     }
 
     default String getRpSearchDtoHolder() {

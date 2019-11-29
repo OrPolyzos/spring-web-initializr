@@ -7,7 +7,7 @@ import org.springframework.validation.BindingResult;
 /**
  * The interface InformativeController
  */
-public interface InformativeController {
+public interface Messenger {
 
     /**
      * The constant BINDING_RESULT_PREFIX
@@ -38,7 +38,7 @@ public interface InformativeController {
      * @param model the Model
      */
     default void sendSuccessMessage(Model model) {
-        model.addAttribute(getInfoMessageHolder(), "Action was successful");
+        model.addAttribute(getInfoMessageHolder(), "The action was executed successfully.");
     }
 
     /**
