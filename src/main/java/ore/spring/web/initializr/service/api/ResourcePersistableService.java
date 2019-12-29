@@ -1,26 +1,23 @@
 package ore.spring.web.initializr.service.api;
 
 import java.io.Serializable;
-import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Stream;
 
-public interface ResourcePersistableService<R, ID extends Serializable> {
+public interface ResourcePersistableService<R, I extends Serializable> {
 
-    R findNullable(ID id);
+  R findNullable(I id);
 
-    R findOrThrow(ID id);
+  R findOrThrow(I id);
 
-    Optional<R> findOptional(ID id);
+  Optional<R> findOptional(I id);
 
-    Stream<R> findAll();
+  Stream<R> findAll();
 
-    Stream<R> findAllBy(Map<String, String> criteria);
+  R insert(R resourcePersistable);
 
-    R insert(R resourcePersistable);
+  R update(R resourcePersistable);
 
-    R update(R resourcePersistable);
-
-    void deleteById(ID id);
+  void deleteById(I id);
 
 }

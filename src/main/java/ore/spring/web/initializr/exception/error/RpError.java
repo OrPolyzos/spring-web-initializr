@@ -2,20 +2,24 @@ package ore.spring.web.initializr.exception.error;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.Getter;
+import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 import org.springframework.http.HttpStatus;
 
-@Getter
-@Setter
+@Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
 public class RpError {
 
-    private int status;
-    private HttpStatus error;
-    private String message;
+  private HttpStatus errorStatus;
+  private String message;
 
+  public int getErrorStatus() {
+    return errorStatus.value();
+  }
+
+  public HttpStatus getErrorHttpStatus() {
+    return errorStatus;
+  }
 }
