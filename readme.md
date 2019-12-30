@@ -26,17 +26,17 @@ It is able to provide out of the box implementations for
 *  RESTful Application (exposing directly the ResourcePersistable or exposing a DTO instead)
 *  Web Application based on server-side rendering with a Template Engine (exposing directly the ResourcePersistable or exposing a DTO instead)
 
-Generic Type Parameters
+__Generic Type Parameters__
 * **I** stands for the class of the field representing the primary key of the ResourcePersistable (e.g. Long)
 * **R** stands for the class of the ResourcePersistable (e.g. User)
 * **D** stands for the class of the DTO that is going to be exposed instead of the ResourcePersistable (e.g. UserDto)
 
-_ResourcePersistable\<I\>_
-* Should be implemented by an Entity of your application (e.g. User)  
+__ResourcePersistable\<I\>__
+* Should be implemented by the corresponding Entity (e.g. User)  
 * There is only a single method to be implemented  
     * `I getRpId();` - Should return the primary key field
 
-_RpService\<R extends ResourcePersistable\<I\>, I extends Serializable, D\> extends ResourcePersistableService\<D, I\>_
+__RpService\<R extends ResourcePersistable\<I\>, I extends Serializable, D\> extends ResourcePersistableService\<D, I\>__
 * Should be implemented by the @Service for the corresponding ResourcePersistable (e.g. UserService)
 * It is responsible for the communication with the corresponding CrudRepository<R,I>
 * There are 3 methods to be implemented
@@ -45,20 +45,20 @@ _RpService\<R extends ResourcePersistable\<I\>, I extends Serializable, D\> exte
     * `Function<D, R> getDtoToEntityConverter();` - Should provide a way for the DTO to be converted to the ResourcePersistable
 
 
-_NoDtoRpService\<R extends ResourcePersistable\<I\>, I extends Serializable\> extends RpService\<R, I, R\>_
+__NoDtoRpService\<R extends ResourcePersistable\<I\>, I extends Serializable\> extends RpService\<R, I, R\>__
 * NoDtoRpService should be used if we want to expose directly the ResourcePersistable
 * Everything from RpService applies to NoDtoRpService, with the difference of 2 already implemented methods
     * `default Function<R, R> getEntityToDtoConverter() { return Function.identity(); }`
     * `default Function<R, R> getDtoToEntityConverter() { return Function.identity(); }`
 
-_RpRestController\<D, I extends Serializable> extends ResourcePersistableRestController\<D, I\>_
+__RpRestController\<D, I extends Serializable> extends ResourcePersistableRestController\<D, I\>__
 * Provides a RESTful API for the CRUD operations of the ResourcePersistable
 * It is responsible for the communication with the corresponding ResourcePersistableService<R, I>
 * Should be implemented by the @RestController for the corresponding ResourcePersistable (e.g. UserRestController)
 * There is only a single method to be implemented  
     * `ResourcePersistableService<D, I> getService();` - Should return the corresponding ResourcePersistableService<D,I> (e.g. UserService)
 
-_RpViewController\<D, I extends Serializable\> extends ResourcePersistableViewController\<D, I\>_
+__RpViewController\<D, I extends Serializable\> extends ResourcePersistableViewController\<D, I\>__
 * Provides a MVC API for the CRUD operations of the ResourcePersistable
 * It is responsible for the communication with the corresponding ResourcePersistableService<R, I, D>
 * Should be implemented by the @Controller for the corresponding ResourcePersistable (e.g. UserController)
@@ -134,8 +134,13 @@ public interface UserRepository extends CrudRepository<User, Long> { }
 ```
 </details>
 
-Example-A
---------
+<details>
+    <summary>
+      Example-A
+      --------    
+    </summary>
+    
+
 _UserService_
 ```java
 @Service
@@ -164,6 +169,7 @@ public class UserRestController implements RpRestController<User, Long> {
     }
 }
 ```
+</details>
 
 Example-B
 --------
