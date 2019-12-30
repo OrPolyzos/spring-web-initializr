@@ -5,6 +5,7 @@ import static org.springframework.http.HttpStatus.OK;
 
 import java.io.Serializable;
 import java.util.Collection;
+import javax.validation.Valid;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -20,7 +21,7 @@ public interface ResourcePersistableRestController<R, I extends Serializable> {
   @ResponseStatus(CREATED)
   @ResponseBody
   @PostMapping
-  R create(@RequestBody R resourcePersistable);
+  R create(@Valid @RequestBody R resourcePersistable);
 
   @ResponseStatus(OK)
   @ResponseBody
@@ -30,7 +31,7 @@ public interface ResourcePersistableRestController<R, I extends Serializable> {
   @ResponseStatus(OK)
   @ResponseBody
   @PutMapping
-  R update(@RequestBody R resourcePersistable);
+  R update(@Valid @RequestBody R resourcePersistable);
 
   @ResponseStatus(OK)
   @DeleteMapping(path = "/{id}")

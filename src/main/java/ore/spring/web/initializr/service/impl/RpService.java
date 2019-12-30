@@ -32,8 +32,7 @@ public interface RpService<R extends ResourcePersistable<I>, I extends Serializa
 
   @Override
   default D findOrThrow(I id) {
-    return findOptional(id)
-        .orElseThrow(() -> new RpMissingResourceException(id));
+    return findOptional(id).orElseThrow(() -> new RpMissingResourceException(id));
   }
 
   @SuppressWarnings("unchecked")

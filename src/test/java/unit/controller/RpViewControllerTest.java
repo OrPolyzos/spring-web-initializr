@@ -12,8 +12,10 @@ import ore.spring.web.initializr.service.impl.NoDtoRpService;
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.ui.Model;
+import org.springframework.validation.BeanPropertyBindingResult;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.MapBindingResult;
+import org.springframework.validation.ObjectError;
 import org.springframework.validation.support.BindingAwareConcurrentModel;
 import unit.domain.User;
 import unit.repository.UserMockRepository;
@@ -100,7 +102,6 @@ public class RpViewControllerTest {
     assertThat(((User) user).getEmail()).isNull();
   }
 
-  @SuppressWarnings("unchecked")
   @Test
   public void readAll() {
     Model model = new BindingAwareConcurrentModel();
@@ -110,7 +111,7 @@ public class RpViewControllerTest {
     Object userList = model.asMap().get(rpViewController.getListHolder());
     assertThat(userList).isNotNull();
 
-    assertThat(((List<User>) userList).size()).isEqualTo(2);
+    assertThat(((List) userList).size()).isEqualTo(2);
   }
 
   @Test
@@ -171,6 +172,24 @@ public class RpViewControllerTest {
   }
 
   @Test
+  public void createInvalidUser() {
+    Model model = new BindingAwareConcurrentModel();
+    BindingResult validationResult = new BeanPropertyBindingResult(Collections.emptyMap(), "notImportant");
+    validationResult.addError(new ObjectError("someObjectName", "someMessage"));
+
+    User newUser = User.builder()
+        .firstName("userC")
+        .lastName("userC")
+        .email("invalidEmail")
+        .build();
+
+    String path = rpViewController.create(newUser, validationResult, model);
+    assertThat(path).isEqualTo("/user/user");
+    assertThat(model.getAttribute(rpViewController.getErrorMessageHolder())).isNotNull();
+    assertThat(rpViewController.getService().findAll().count()).isEqualTo(2);
+  }
+
+  @Test
   public void updateValidUser() {
     Model model = new BindingAwareConcurrentModel();
     BindingResult validationResult = new MapBindingResult(Collections.emptyMap(), "notImportant");
@@ -203,6 +222,26 @@ public class RpViewControllerTest {
 
     rpViewController.update(newUser.getId(), newUser, validationResult, model);
   }
+
+  @Test
+  public void updateInvalidUser() {
+    Model model = new BindingAwareConcurrentModel();
+    BindingResult validationResult = new BeanPropertyBindingResult(Collections.emptyMap(), "notImportant");
+    validationResult.addError(new ObjectError("someObjectName", "someMessage"));
+
+    User newUser = User.builder()
+        .id(0L)
+        .firstName("userC")
+        .lastName("userC")
+        .email("invalidEmail")
+        .build();
+
+    String path = rpViewController.update(newUser.getId(), newUser, validationResult, model);
+    assertThat(path).isEqualTo("/user/edit-user");
+    assertThat(model.getAttribute(rpViewController.getErrorMessageHolder())).isNotNull();
+    assertThat(rpViewController.getService().findAll().count()).isEqualTo(2);
+  }
+
 
   @Test
   public void deleteUser() {

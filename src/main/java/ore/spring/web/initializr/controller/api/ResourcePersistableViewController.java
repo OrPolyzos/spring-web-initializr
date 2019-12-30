@@ -1,6 +1,7 @@
 package ore.spring.web.initializr.controller.api;
 
 import java.io.Serializable;
+import javax.validation.Valid;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -17,10 +18,10 @@ public interface ResourcePersistableViewController<R, I extends Serializable> {
   String getUpdateView(@PathVariable("id") I resourcePersistableId, Model model);
 
   @PostMapping
-  String create(@ModelAttribute R resourcePersistableDto, BindingResult bindingResult, Model model);
+  String create(@Valid @ModelAttribute R resourcePersistableDto, BindingResult bindingResult, Model model);
 
   @PostMapping(path = "/{id}/edit")
-  String update(@PathVariable("id") I resourcePersistableId, @ModelAttribute R resourcePersistableDto, BindingResult bindingResult, Model model);
+  String update(@PathVariable("id") I resourcePersistableId, @Valid @ModelAttribute R resourcePersistableDto, BindingResult bindingResult, Model model);
 
   @PostMapping(path = "/{id}/delete")
   String delete(@PathVariable("id") I resourcePersistableId, Model model);
