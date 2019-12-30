@@ -132,7 +132,7 @@ public interface UserRepository extends CrudRepository<User, Long> { }
 
 <details>
     <summary>
-      <b>Example-A - RESTful API exposing User</b>
+      <b>Example A - RESTful API exposing User</b>
     </summary>
     
 
@@ -168,10 +168,9 @@ public class UserRestController implements RpRestController<User, Long> {
 
 <details>
     <summary>
-      <b>RESTful API exposing UserDto</b>
+      <b>Example B - RESTful API exposing UserDto</b>
     </summary>
 
---------
 _UserDtoService_
 ```java
 @Service
@@ -222,6 +221,101 @@ public class UserDtoRestController implements RpRestController<UserDto, Long> {
 }
 ```
 </details>
+
+<details>
+    <summary>
+      <b>Example C - MVC API exposing User</b>
+    </summary>
+
+_UserService_
+```java
+@Service
+public class UserService implements NoDtoRpService<User, Long> {
+
+    private final UserRepository userRepository;
+
+    @Override
+    public CrudRepository<User, Long> getRepository() {
+        return userRepository;
+    }
+}
+```
+
+_UserViewController_
+```java
+@RequestMapping("/view/user")
+@Controller
+public class UserViewController implements RpViewController<User, Long> {
+
+  private final UserService userService;
+
+  @Override
+  public NoDtoRpService<User, Long> getService() {
+    return userService;
+  }
+}
+```
+</details>
+
+
+<details>
+    <summary>
+      <b>Example D - MVC API exposing UserDto</b>
+    </summary>
+
+_UserDtoService_
+```java
+@Service
+public class UserDtoService implements RpService<User, Long, UserDto> {
+
+    private final UserRepository userRepository;
+
+    @Override
+    public CrudRepository<User, Long> getRepository() {
+        return userRepository;
+    }
+
+    @Override
+    public Function<User, UserDto> getEntityToDtoConverter() {
+        return user -> UserDto.builder()
+                .id(user.getId())
+                .firstName(user.getFirstName())
+                .lastName(user.getLastName())
+                .email(user.getEmail())
+                .build();
+    }
+
+    @Override
+    public Function<UserDto, User> getDtoToEntityConverter() {
+        return userDto -> User.builder()
+                .id(userDto.getId())
+                .firstName(userDto.getFirstName())
+                .lastName(userDto.getLastName())
+                .email(userDto.getEmail())
+                .build();
+    }
+}
+
+```
+
+_UserDtoRestController_
+```java
+@RequestMapping("/view/user/dto")
+@Controller
+public class UserDtoViewController implements RpViewController<UserDto, Long> {
+
+  private final UserDtoService userService;
+
+  @Override
+  public RpService<User, Long, UserDto> getService() {
+    return userService;
+  }
+
+}
+
+```
+</details>
+
 
 Contributing
 ------------
