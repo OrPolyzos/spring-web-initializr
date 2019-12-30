@@ -67,7 +67,8 @@ __RpViewController\<D, I extends Serializable\> extends ResourcePersistableViewC
     
 Examples
 --------
-In the following examples the ResourcePersistable will be a User and we are going to provide  
+In the following examples the ResourcePersistable will be a User    
+
 <details>
     <summary>
       <b>General Structure</b>
@@ -295,7 +296,6 @@ public class UserDtoService implements RpService<User, Long, UserDto> {
                 .build();
     }
 }
-
 ```
 
 _UserDtoRestController_
