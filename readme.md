@@ -68,11 +68,15 @@ _RpViewController\<D, I extends Serializable\> extends ResourcePersistableViewCo
 Examples
 --------
 In the following examples the ResourcePersistable will be a User and we are going to provide
-  * [RESTful API exposing User](#ExampleA)
-  * [RESTful API exposing UserDto](#ExampleB)
-  * [MVC API exposing User](#ExampleC)
-  * [MVC API exposing UserDto](#ExampleD)
+  * [Example-A - RESTful API exposing User](#Example-A)
+  * [Example-B - RESTful API exposing UserDto](#Example-B)
+  * [Example-C - MVC API exposing User](#Example-C)
+  * [Example-D - MVC API exposing UserDto](#Example-D)
+  
 
+<details>
+    <summary>General</summary>
+    
 _pom.xml_
 ```xml
 <dependency>
@@ -128,8 +132,9 @@ _UserRepository_
 @Repository
 public interface UserRepository extends CrudRepository<User, Long> { }
 ```
+</details>
 
-ExampleA
+Example-A
 --------
 _UserService_
 ```java
@@ -149,7 +154,7 @@ _UserRestController_
 ```java
 @RequestMapping("/api/user")
 @Controller
-public class UserNoDtoRestController implements RpRestController<User, Long> {
+public class UserRestController implements RpRestController<User, Long> {
 
     private final UserService userService;
 
@@ -159,6 +164,59 @@ public class UserNoDtoRestController implements RpRestController<User, Long> {
     }
 }
 ```
+
+Example-B
+--------
+_UserDtoService_
+```java
+@Service
+public class UserDtoService implements RpService<User, Long, UserDto> {
+
+    private final UserRepository userRepository;
+
+    @Override
+    public CrudRepository<User, Long> getRepository() {
+        return userRepository;
+    }
+
+    @Override
+    public Function<User, UserDto> getEntityToDtoConverter() {
+        return user -> UserDto.builder()
+                .id(user.getId())
+                .firstName(user.getFirstName())
+                .lastName(user.getLastName())
+                .email(user.getEmail())
+                .build();
+    }
+
+    @Override
+    public Function<UserDto, User> getDtoToEntityConverter() {
+        return userDto -> User.builder()
+                .id(userDto.getId())
+                .firstName(userDto.getFirstName())
+                .lastName(userDto.getLastName())
+                .email(userDto.getEmail())
+                .build();
+    }
+}
+
+```
+
+_UserDtoRestController_
+```java
+@RequestMapping("/api/user/dto")
+@Controller
+public class UserDtoRestController implements RpRestController<UserDto, Long> {
+
+    private final UserDtoService userDtoService;
+
+    @Override
+    public ResourcePersistableService<UserDto, Long> getService() {
+        return userDtoService;
+    }
+}
+```
+
 
 Contributing
 ------------
