@@ -67,15 +67,11 @@ __RpViewController\<D, I extends Serializable\> extends ResourcePersistableViewC
     
 Examples
 --------
-In the following examples the ResourcePersistable will be a User and we are going to provide
-  * [Example-A - RESTful API exposing User](#Example-A)
-  * [Example-B - RESTful API exposing UserDto](#Example-B)
-  * [Example-C - MVC API exposing User](#Example-C)
-  * [Example-D - MVC API exposing UserDto](#Example-D)
-  
-
+In the following examples the ResourcePersistable will be a User and we are going to provide  
 <details>
-    <summary>General</summary>
+    <summary>
+      <b>General Structure</b>
+    </summary>
     
 _pom.xml_
 ```xml
@@ -136,8 +132,7 @@ public interface UserRepository extends CrudRepository<User, Long> { }
 
 <details>
     <summary>
-      Example-A
-      --------    
+      <b>Example-A - RESTful API exposing User</b>
     </summary>
     
 
@@ -171,7 +166,11 @@ public class UserRestController implements RpRestController<User, Long> {
 ```
 </details>
 
-Example-B
+<details>
+    <summary>
+      <b>RESTful API exposing UserDto</b>
+    </summary>
+
 --------
 _UserDtoService_
 ```java
@@ -222,7 +221,7 @@ public class UserDtoRestController implements RpRestController<UserDto, Long> {
     }
 }
 ```
-
+</details>
 
 Contributing
 ------------
