@@ -17,6 +17,17 @@ Table of Contents
   * [Examples](#Examples)
   * [Contributing](#Contributing)
   * [License](#License)
+
+TL;DR
+-----
+```xml
+<dependency>
+    <groupId>io.github.orpolyzos</groupId>
+    <artifactId>spring-web-initializr</artifactId>
+    <version>2.0.0</version>
+</dependency>
+```
+**Fully working examples can be found at [Swi(p) Demo](https://github.com/OrPolyzos/swip-demo)** 
   
 Description
 -----------
