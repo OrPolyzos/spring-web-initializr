@@ -1,1 +1,3 @@
 src/* linguist-language=Java
+java-docs/* export-ignore
+checkstyle/* export-ignore
