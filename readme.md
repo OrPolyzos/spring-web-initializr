@@ -80,9 +80,9 @@ __RpViewController\<D, I extends Serializable\> extends ResourcePersistableViewC
 Examples
 --------
 * [CRUD REST API exposing the Entity](https://github.com/OrPolyzos/spring-web-initializr/wiki/Example:-CRUD-REST-API-exposing-the-Entity)
-* [CRUD REST API exposing the-Data Transfer Object (DTO)](https://github.com/OrPolyzos/spring-web-initializr/wiki/Example:-CRUD-REST-API-exposing-the-Data-Transfer-Object-(DTO))
+* [CRUD REST API exposing the Data Transfer Object (DTO)](https://github.com/OrPolyzos/spring-web-initializr/wiki/Example:-CRUD-REST-API-exposing-the-Data-Transfer-Object-(DTO))
 * [CRUD MVC API exposing the Entity](https://github.com/OrPolyzos/spring-web-initializr/wiki/Example:-CRUD-MVC-API-exposing-the-Entity)
-* [CRUD MVC API exposing the-Data Transfer Object (DTO)](https://github.com/OrPolyzos/spring-web-initializr/wiki/Example:-CRUD-MVC-API-exposing-the-Data-Transfer-Object-(DTO))
+* [CRUD MVC API exposing the Data Transfer Object (DTO)](https://github.com/OrPolyzos/spring-web-initializr/wiki/Example:-CRUD-MVC-API-exposing-the-Data-Transfer-Object-(DTO))
 
 
 Contributing
