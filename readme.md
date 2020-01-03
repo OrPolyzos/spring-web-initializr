@@ -26,7 +26,7 @@ Table of Contents
 -----------------
   * [Description](#Description)
   * [Examples](#Examples)
-  * [Contributing](#Contributing)
+  * [Contributors](#Contributors)
   * [License](#License)
   
 Description
@@ -85,9 +85,31 @@ Examples
 * [CRUD MVC API exposing the Data Transfer Object (DTO)](https://github.com/OrPolyzos/spring-web-initializr/wiki/Example:-CRUD-MVC-API-exposing-the-Data-Transfer-Object-(DTO))
 
 
-Contributing
+Contributors
 ------------
-To contribute to Spring Web Initializr, follow the instructions in our [contributing guide](/contributing.md).
+<!-- ALL-CONTRIBUTORS-LIST:START - Do not remove or modify this section -->
+<!-- prettier-ignore -->
+<table>
+  <tr>
+    <td align="center">
+      <a href="https://github.com/orpolyzos">
+        <img src="https://avatars0.githubusercontent.com/u/27271443?s=460&v=4" width="100px;" alt="Orestes Polyzos"/>
+        <br />
+        <sub><b>Orestes Polyzos</b></sub>
+      </a>
+     </td>
+    <td align="center">
+      <a href="https://github.com/terminatorbill">
+        <img src="https://avatars3.githubusercontent.com/u/5015605?s=400&v=4" width="100px;" alt="BlueMagic"/>
+        <br />
+        <sub><b>BlueMagic</b></sub>
+      </a>
+     </td>     
+  </tr>
+</table>
+
+<!-- ALL-CONTRIBUTORS-LIST:END -->  
+__To contribute to Spring Web Initializr, follow the instructions in our [contributing guide](/contributing.md)__
 
 License
 -------
