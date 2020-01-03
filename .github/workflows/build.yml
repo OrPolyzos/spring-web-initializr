@@ -1,4 +1,4 @@
-name: swi-build
+name: build
 
 on:
   push:
@@ -44,4 +44,4 @@ jobs:
       uses: actions/upload-artifact@v1
       with:
         name: artifact
-        path: ./target/*.jar
+        path: ./target/spring-web-initializr.jar
