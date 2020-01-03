@@ -11,7 +11,7 @@ jobs:
     strategy:
       matrix:
         java: [ 8 ]
-    name: Java ${{ matrix.java }} compile
+    name: Compiling with Java ${{ matrix.java }}
     steps:
       - uses: actions/checkout@master
       - name: Setup java
@@ -22,7 +22,7 @@ jobs:
   test:
     runs-on: ubuntu-latest
     needs: compile
-    name: Build Maven project
+    name: Build Maven project (with Tests)
     steps:
     - uses: actions/checkout@v1
     - uses: actions/cache@v1
@@ -35,5 +35,5 @@ jobs:
       uses: actions/setup-java@v1
       with:
         java-version: 8
-    - name: Build and test project
+    - name: Test Maven project
       run: mvn clean test

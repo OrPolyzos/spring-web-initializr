@@ -11,7 +11,7 @@ jobs:
     strategy:
       matrix:
         java: [ 8 ]
-    name: Java ${{ matrix.java }} compile
+    name: Compiling with Java ${{ matrix.java }}
     steps:
       - uses: actions/checkout@master
       - name: Setup java
@@ -35,7 +35,7 @@ jobs:
       uses: actions/setup-java@v1
       with:
         java-version: 8
-    - name: Build and test project
+    - name: Build Mven project (skipping Tests)
       run: mvn clean verify -DskipTests
     - name: Upload Maven build artifact
       uses: actions/upload-artifact@v1
