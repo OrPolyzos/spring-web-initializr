@@ -1,11 +1,14 @@
 Spring Web Initializr
 ==========
+
+[![build][shield-build]](#)
+[![tests][shield-tests]](#)  
+[![code-coverage-92%][shield-coverage]](#)
+
 [![release-2.0.0][shield-release]](#)
-[![build-passing][shield-build]](#)
-[![code-coverage-92%][shield-coverage]](#)  
 [![jdk-8][shield-jdk]](#)
 [![spring-boot-2.0.0.RELEASE][shield-spring]](#)
-[![MIT licensed][shield-license]](#)
+[![MIT licensed][shield-license]](#)  
 
 Spring Web Initializr _(will be referenced Swi from now on)_ is a library that helps you easily create Web Apps with Spring Boot.  
 It was initially developed in order to support the [Swip (Spring Web Initializr Plugin)](https://plugins.jetbrains.com/plugin/12239-swip-spring-web-initializr-) 
@@ -117,8 +120,9 @@ Spring Web Initializr is licensed under the [MIT](/license.md) license.
 Copyright &copy; 2019, Orestes Polyzos
 
 [shield-release]: https://img.shields.io/badge/release-2.0.0-blue.svg
-[shield-build]: https://img.shields.io/badge/build-passing-brightgreen.svg
-[shield-coverage]: https://img.shields.io/badge/coverage-92%25-brightgreen.svg
 [shield-jdk]: https://img.shields.io/badge/jdk-8-blue.svg
 [shield-spring]: https://img.shields.io/badge/spring-2.2.1-blue.svg
 [shield-license]: https://img.shields.io/badge/license-MIT-blue.svg
+[shield-build]: https://github.com/OrPolyzos/spring-web-initializr/workflows/build/badge.svg
+[shield-tests]: https://github.com/OrPolyzos/spring-web-initializr/workflows/tests/badge.svg
+[shield-coverage]: https://img.shields.io/badge/coverage-92%25-brightgreen.svg
