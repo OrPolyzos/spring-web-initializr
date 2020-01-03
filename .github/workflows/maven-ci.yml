@@ -1,4 +1,4 @@
-name: Spring Web Initializr Maven CI
+name: swi-build
 
 on:
   push:
