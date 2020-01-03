@@ -4,9 +4,6 @@ on:
   push:
     branches:
       - master
-  pull_request:
-    branches: 
-      - master
 
 jobs:
   compile:
@@ -39,7 +36,7 @@ jobs:
       with:
         java-version: 8
     - name: Build and test project
-      run: mvn clean verify
+      run: mvn clean verify -DskipTests
     - name: Upload Maven build artifact
       uses: actions/upload-artifact@v1
       with:
