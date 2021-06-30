@@ -101,13 +101,6 @@ Contributors
         <sub><b>Orestes Polyzos</b></sub>
       </a>
      </td>
-    <td align="center">
-      <a href="https://github.com/terminatorbill">
-        <img src="https://avatars3.githubusercontent.com/u/5015605?s=400&v=4" width="100px;" alt="BlueMagic"/>
-        <br />
-        <sub><b>BlueMagic</b></sub>
-      </a>
-     </td>     
   </tr>
 </table>
 
